@@ -1,0 +1,11 @@
+/.tmp-verify/
+/.tmp-pdf/
+/verification-output/
+
+# Local export and rendering fixtures
+/test-*.html
+/*-test.html
+/*.test.pdf
+/*.test.xlsx
+/verify-*.ps1
+/verification-*.ps1

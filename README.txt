@@ -1,15 +1,17 @@
 ICON Panels - Order Pricing Demo
 
 Open index.html after extracting this ZIP.
-All interface assets are HTML, CSS, JavaScript and supplied logo. No custom backend.
+All interface assets are local HTML, CSS, JavaScript, the ICON logo and the wall-panel illustration. No custom backend.
 
 The demo includes:
 - Multiple 4 cm Wall visible fix 1.0 panel lines, each with independent configuration.
 - Add, edit and remove items; generated editable customer descriptions.
 - Order costing and profit; aggregated materials in source units.
+- Styled Excel material requirements and optional raw CSV export.
 - Technical/commercial offer with optional entered payment/delivery/validity terms.
 - USD source pricing and EGP conversion using a manually entered exchange rate.
 - Printable customer offer, excluding internal cost/profit and raw material requirements.
+- A4 customer offer export (select A4 and background graphics in the browser print dialog).
 - Draft saving in browser session storage only. No Bitrix requests or writes.
 
 Bitrix integration is not configured. Map client product IDs, source rates,

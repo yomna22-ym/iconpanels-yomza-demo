@@ -1,10 +1,432 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ICON Panels | Order Pricing</title><meta name="description" content="Configure panel order lines, calculate costs and prepare a customer offer."><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="style.css?v=9"></head><body>
-<header><a class="brand" href="./"><img src="logo.png" alt="ICON Panels"><span class="brand-divider"></span><div><strong>Order pricing</strong><small>Sales workspace</small></div></a><div class="header-actions"><span class="demo-tag">DEMO / 4 CM</span><button id="reset" class="quiet">Reset</button><button id="save">Save draft</button><button id="print" class="primary">Export customer offer</button></div></header>
-<main><section class="deal-context" aria-label="Bitrix deal context"><div class="deal-context-top"><p class="eyebrow">BITRIX24 · DEAL CONTEXT</p><span class="connection-badge">Demo · not connected</span></div><div class="deal-context-main"><div class="deal-identity"><span class="deal-number">#1001</span><div><small>DEAL</small><strong>Wall panel supply</strong></div></div><label class="deal-customer">CUSTOMER<input id="customer" aria-label="Customer name" value="Sample customer"></label><div class="deal-scope"><small>PRICING SCOPE</small><strong>This deal’s order items</strong></div></div><details class="deal-integration"><summary>How this fits inside Bitrix</summary><div class="integration-steps"><div><b>01 · Open the deal</b><p>The planned Pricing tab opens this workspace for the selected deal.</p></div><div><b>02 · Configure its order</b><p>Load the deal and customer, then price its panel items and prepare the offer.</p></div><div><b>03 · Save to the same deal</b><p>The planned connection saves the priced items and totals back to that deal.</p></div></div><p class="integration-note">This demo uses sample deal #1001. Save draft currently saves in this browser tab.</p></details></section><div class="heading"><div><h1>Order pricing</h1><p class="muted">Configure the order and prepare its technical &amp; commercial offer.</p></div></div>
-<div class="workspace"><section class="work-area"><nav class="tabs" aria-label="Order views"><button class="active" data-view="order" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h4"/></svg><span class="tab-label">Order items</span><span id="lineCount" class="tab-count">1</span></button><button class="" data-view="cost" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M7 16v-4M12 16V8M17 16V4"/></svg><span class="tab-label">Cost &amp; profit</span></button><button class="" data-view="materials" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/></svg><span class="tab-label">Materials</span></button><button class="" data-view="offer" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><span class="tab-label">Customer offer</span></button></nav>
-<section class="view active" id="view-order"><div class="section-head"><div><h2>Order items</h2><p class="muted">Each line has its own specifications, quantity and selling price.</p></div><button id="add" class="primary"><span>+</span> Add item</button></div><div class="table-scroll"><table class="order-table"><thead><tr><th>PRODUCT &amp; SPECIFICATION</th><th>QTY / UNIT</th><th>UNIT PRICE</th><th>LINE TOTAL</th><th></th></tr></thead><tbody id="orderRows"></tbody></table></div><div class="empty" id="empty" hidden><h3>Start with your first panel</h3><p>Add a 4 cm wall panel and choose its materials.</p><button id="emptyAdd" class="primary">Add item</button></div><div class="order-note"><span class="note-icon">i</span><span>Cost and raw material quantities update from the selected specifications.</span></div><section class="terms"><div class="section-head"><div><p class="eyebrow">COMMERCIAL DETAILS</p><h2>Offer terms</h2></div><span class="subtle">Included in the customer document</span></div><div class="terms-grid"><label>Delivery point<input id="deliveryPoint" placeholder="Enter delivery location"></label><label>Payment terms<input id="paymentTerms" placeholder="Enter agreed payment terms"></label><label>Delivery time<input id="deliveryTime" placeholder="Enter delivery period"></label><label>Offer validity<input id="validity" placeholder="Enter validity period"></label></div></section></section>
-<section class="view" id="view-cost"><div class="section-head"><div><p class="eyebrow">INTERNAL ONLY</p><h2>Cost &amp; profitability</h2><p class="muted">Costs and profit are excluded from the customer offer.</p></div></div><div class="table-scroll"><table><thead><tr><th>ORDER ITEM</th><th>RAW MATERIALS</th><th>FULL COST</th><th>SELLING TOTAL</th><th>PROFIT</th></tr></thead><tbody id="costRows"></tbody></table></div><details class="method"><summary>Source calculation notes</summary><p>Material consumption and rates come from Cost Details and Price $. Raw material cost feeds scrap (1.5%), fixed direct cost (1.3%), variable direct cost (workbook rate), direct G&amp;A (2.5%) and indirect G&amp;A (1.5%). The margin is applied as cost ÷ (1 − margin), then the unit selling price is rounded as in JAF.</p><p>The workbook labels scrap 2% but calculates 1.5%. For PUR, C1 charges adhesion while showing zero adhesion quantity. The demo retains both behaviours. Raw material requirements exclude the separate scrap cost allowance.</p></details></section>
-<section class="view" id="view-materials"><div class="section-head"><div><p class="eyebrow">ORDER REQUIREMENTS</p><h2>Raw materials</h2><p class="muted">Combined across every order item, in each material’s source unit.</p></div><button id="exportMaterials">Export CSV</button></div><div class="table-scroll"><table><thead><tr><th>MATERIAL</th><th>UNIT</th><th>TOTAL REQUIRED</th><th>MATERIAL COST</th></tr></thead><tbody id="materialRows"></tbody></table></div><p class="footnote">This is a calculated material requirement, not an inventory availability or production reservation.</p></section>
-<section class="view" id="view-offer"><div class="offer-document"><div class="document-top"><img src="logo.png" alt="ICON Panels"><div><h2>Technical &amp; commercial offer</h2><p>Draft quotation <span id="offerCurrency">USD</span></p></div></div><div class="document-meta"><div><small>PREPARED FOR</small><strong id="offerCustomer">Sample customer</strong></div><div><small>SUBJECT</small><strong>Supply of wall panels</strong></div></div><div class="table-scroll"><table class="offer-table"><thead><tr><th>WORK DESCRIPTION</th><th>UNIT</th><th>QUANTITY</th><th>UNIT PRICE</th><th>TOTAL</th></tr></thead><tbody id="offerRows"></tbody></table></div><div class="document-total"><span>Total offer value</span><strong id="offerTotal"></strong></div><div id="offerTerms" class="offer-terms"></div><p class="footnote">Draft offer · Taxes and transport are not included in this demo.</p></div></section>
-</section><aside class="summary"><p class="eyebrow">ORDER SUMMARY</p><div class="summary-title"><h2>Total selling value</h2><span id="summaryCurrency">USD</span></div><div class="headline-total" id="total">7,000.00</div><p id="summaryCaption">1 configured item</p><div class="summary-lines"><div><span>Before discount</span><b id="before"></b></div><div><span>Total discount</span><b id="discount"></b></div><div class="net"><span>Net selling value</span><b id="net"></b></div></div><div class="internal-summary"><p>INTERNAL REVIEW</p><div><span>Total cost</span><b id="fullCost"></b></div><div><span>Profit after discount</span><b id="profit"></b></div><div><span>Actual profit margin</span><b id="actualMargin"></b></div></div><div class="currency-controls"><label>Offer currency<select id="currency"><option>USD</option><option>EGP</option></select></label><label id="fxWrap" hidden>EGP per USD<input id="fx" type="number" min="0.0001" step="0.0001" placeholder="Enter agreed exchange rate"></label><p id="currencyNote" class="footnote">Source calculations are in USD.</p></div><button id="review" class="summary-button">Review customer offer</button><p class="summary-foot">Prices exclude taxes and transport.</p></aside></div><p id="status" role="status" class="status">Demo draft · No data is sent to Bitrix.</p></main>
-<div id="drawerBackdrop" class="backdrop" hidden></div><aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden><div class="drawer-head"><div><p class="eyebrow">CONFIGURE ORDER ITEM</p><h2 id="drawerTitle">Wall visible fix panel</h2></div><button id="closeDrawer" aria-label="Close item editor">×</button></div><form id="itemForm"><div class="drawer-body"><div class="panel-spec"><b>40 mm</b><div><strong>Wall visible fix · 1.0 m width</strong><span>Pricing unit: linear metre (M)</span></div></div><div class="field-section"><h3>01 <span>Material specifications</span></h3><div class="field-grid"><label>Inside steel<select id="inside"></select></label><label>Outside steel<select id="outside"></select></label><label>Foam<select id="foam"><option>PIR</option><option>PUR</option><option>EPS</option></select></label><label>Packing<select id="packing"><option>Plastic Roll</option><option>None</option></select></label><label class="wide">Colour<select id="colour"></select></label><label class="wide">Other<select id="other"><option>None</option><option>فلكسبل</option><option>درجة ثانية</option></select></label></div></div><div class="field-section"><h3>02 <span>Quantity &amp; pricing</span></h3><div class="field-grid"><label>Quantity (M)<input id="quantity" type="number" min="0.01" step="0.01" required></label><label>Target margin (%)<input id="margin" type="number" min="0" max="99" step="0.1" required></label></div><div class="item-calculated"><span>Calculated unit price</span><b id="calculatedPrice"></b></div><label>Selling price after discount (USD / M)<input id="after" type="number" min="0" step="0.01" placeholder="Use calculated price"></label><p class="footnote">Leave blank to use the calculated price.</p></div><div class="field-section"><h3>03 <span>Customer description</span></h3><label class="sr-only" for="description">Technical description</label><textarea id="description" rows="5"></textarea><div class="description-footer"><span>Editable text for the customer offer</span><button type="button" id="generateDescription" class="text-button">Generate from specs</button></div></div><details class="item-materials"><summary>View this item’s material consumption</summary><div id="itemMaterials"></div></details><p id="itemError" role="status"></p></div><div class="drawer-footer"><div><small>ITEM TOTAL · USD</small><strong id="itemTotal"></strong></div><button type="submit" class="primary" id="applyItem">Add to order</button></div></form></aside><script src="data.js"></script><script src="calculator.js"></script><script src="order-model.js"></script><script src="app.js?v=8"></script><script src="dropdowns.js?v=8"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ICON Panels | Order Pricing</title>
+<meta name="description" content="Configure panel order lines, calculate costs and prepare a customer offer.">
+<link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg?v=2">
+<link rel="shortcut icon" href="favicon.svg?v=2">
+<meta name="theme-color" content="#173f69">
+<link rel="stylesheet" href="style.css?v=13">
+</head>
+<body>
+<header>
+<a class="brand" href="./">
+<img src="logo.png" alt="ICON Panels">
+<span class="brand-divider">
+</span>
+<div>
+<strong>Order pricing</strong>
+<small>Sales workspace</small>
+</div>
+</a>
+<div class="header-actions">
+<span class="demo-tag">DEMO / 4 CM</span>
+<button id="reset" class="quiet">Reset</button>
+<button id="save">Save draft</button>
+<button id="print" class="primary">Export A4 customer offer</button>
+</div>
+</header>
+<main>
+<section class="deal-context" aria-label="Bitrix deal context">
+<div class="deal-context-top">
+<p class="eyebrow">BITRIX24 · DEAL CONTEXT</p>
+<span class="connection-badge">Demo · not connected</span>
+</div>
+<div class="deal-context-main">
+<div class="deal-identity">
+<span class="deal-number">#1001</span>
+<div>
+<small>DEAL</small>
+<strong>Wall panel supply</strong>
+</div>
+</div>
+<label class="deal-customer">CUSTOMER<input id="customer" aria-label="Customer name" value="Sample customer">
+</label>
+<div class="deal-scope">
+<small>PRICING SCOPE</small>
+<strong>This deal’s order items</strong>
+</div>
+</div>
+<details class="deal-integration">
+<summary>How this fits inside Bitrix</summary>
+<div class="integration-steps">
+<div>
+<b>01 · Open the deal</b>
+<p>The planned Pricing tab opens this workspace for the selected deal.</p>
+</div>
+<div>
+<b>02 · Configure its order</b>
+<p>Load the deal and customer, then price its panel items and prepare the offer.</p>
+</div>
+<div>
+<b>03 · Save to the same deal</b>
+<p>The planned connection saves the priced items and totals back to that deal.</p>
+</div>
+</div>
+<p class="integration-note">This demo uses sample deal #1001. Save draft currently saves in this browser tab.</p>
+</details>
+</section>
+<div class="heading">
+<div>
+<h1>Order pricing</h1>
+<p class="muted">Configure the order and prepare its technical &amp; commercial offer.</p>
+</div>
+</div>
+<div class="workspace">
+<section class="work-area">
+<nav class="tabs" aria-label="Order views">
+<button class="active" data-view="order" aria-pressed="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="4" y="4" width="16" height="16" rx="3"/>
+<path d="M8 9h8M8 13h8M8 17h4"/>
+</svg>
+<span class="tab-label">Order items</span>
+<span id="lineCount" class="tab-count">1</span>
+</button>
+<button class="" data-view="cost" aria-pressed="false">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M4 20h16M7 16v-4M12 16V8M17 16V4"/>
+</svg>
+<span class="tab-label">Cost &amp; profit</span>
+</button>
+<button class="" data-view="materials" aria-pressed="false">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/>
+</svg>
+<span class="tab-label">Materials</span>
+</button>
+<button class="" data-view="offer" aria-pressed="false">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z"/>
+<path d="M14 3v6h6M8 13h8M8 17h5"/>
+</svg>
+<span class="tab-label">Customer offer</span>
+</button>
+</nav>
+<section class="view active" id="view-order">
+<div class="section-head">
+<div>
+<h2>Order items</h2>
+<p class="muted">Each line has its own specifications, quantity and selling price.</p>
+</div>
+<button id="add" class="primary">
+<span>+</span> Add item</button>
+</div>
+<div class="table-scroll">
+<table class="order-table">
+<thead>
+<tr>
+<th>PRODUCT &amp; SPECIFICATION</th>
+<th>QTY / UNIT</th>
+<th>UNIT PRICE</th>
+<th>LINE TOTAL</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody id="orderRows">
+</tbody>
+</table>
+</div>
+<div class="empty" id="empty" hidden>
+<h3>Start with your first panel</h3>
+<p>Add a 4 cm wall panel and choose its materials.</p>
+<button id="emptyAdd" class="primary">Add item</button>
+</div>
+<div class="order-note">
+<span class="note-icon">i</span>
+<span>Cost and raw material quantities update from the selected specifications.</span>
+</div>
+<section class="terms">
+<div class="section-head">
+<div>
+<p class="eyebrow">QUOTATION DETAILS</p>
+<h2>Customer document</h2>
+</div>
+<span class="subtle">Saved with this draft and included in the export</span>
+</div>
+<div class="metadata-grid">
+<label>Quotation reference<input id="quoteRef" placeholder="Enter quotation number">
+</label>
+<label>Quotation date<input id="quoteDate" type="date">
+</label>
+<label>Attention<input id="attention" placeholder="Customer contact">
+</label>
+<label>Customer email<input id="customerEmail" type="email" placeholder="name@company.com">
+</label>
+<label>Sales contact<input id="salesName" placeholder="Sales representative">
+</label>
+<label>Sales email<input id="salesEmail" type="email" placeholder="name@iconpanels.com">
+</label>
+<label>Sales mobile<input id="salesPhone" placeholder="Phone number">
+</label>
+<label>Subject<input id="subject" placeholder="Quotation subject">
+</label>
+<label>Prepared by<input id="preparedBy" placeholder="Name and title">
+</label>
+<label>Approved by<input id="approvedBy" placeholder="Name and title">
+</label>
+</div>
+<div class="commercial-fields">
+<h3>Commercial terms</h3>
+<div class="terms-grid">
+<label>Delivery point<input id="deliveryPoint" placeholder="Enter delivery location">
+</label>
+<label>Payment terms<input id="paymentTerms" placeholder="Enter agreed payment terms">
+</label>
+<label>Delivery time<input id="deliveryTime" placeholder="Enter delivery period">
+</label>
+<label>Quotation validity<input id="validity" placeholder="Enter validity period">
+</label>
+<label class="wide">Additional terms<textarea id="additionalTerms" rows="3" placeholder="Add only agreed commercial notes, taxes or exclusions">
+</textarea>
+</label>
+</div>
+</div>
+</section>
+</section>
+<section class="view" id="view-cost">
+<div class="section-head">
+<div>
+<p class="eyebrow">INTERNAL ONLY</p>
+<h2>Cost &amp; profitability</h2>
+<p class="muted">Costs and profit are excluded from the customer offer.</p>
+</div>
+</div>
+<div class="table-scroll">
+<table>
+<thead>
+<tr>
+<th>ORDER ITEM</th>
+<th>RAW MATERIALS</th>
+<th>FULL COST</th>
+<th>SELLING TOTAL</th>
+<th>PROFIT</th>
+</tr>
+</thead>
+<tbody id="costRows">
+</tbody>
+</table>
+</div>
+<details class="method">
+<summary>Source calculation notes</summary>
+<p>Material consumption and rates come from Cost Details and Price $. Raw material cost feeds scrap (1.5%), fixed direct cost (1.3%), variable direct cost (workbook rate), direct G&amp;A (2.5%) and indirect G&amp;A (1.5%). The margin is applied as cost ÷ (1 − margin), then the unit selling price is rounded as in JAF.</p>
+<p>The workbook labels scrap 2% but calculates 1.5%. For PUR, C1 charges adhesion while showing zero adhesion quantity. The demo retains both behaviours. Raw material requirements exclude the separate scrap cost allowance.</p>
+</details>
+</section>
+<section class="view" id="view-materials">
+<div class="section-head">
+<div>
+<p class="eyebrow">ORDER REQUIREMENTS</p>
+<h2>Raw materials</h2>
+<p class="muted">Combined across every order item, in each material’s source unit.</p>
+</div>
+<div class="export-actions">
+<button id="exportMaterialsXlsx" class="primary" type="button">Export Excel</button>
+<button id="exportMaterials" type="button">Export raw CSV</button>
+</div>
+</div>
+<div class="table-scroll">
+<table>
+<thead>
+<tr>
+<th>MATERIAL</th>
+<th>UNIT</th>
+<th>TOTAL REQUIRED</th>
+<th>MATERIAL COST</th>
+</tr>
+</thead>
+<tbody id="materialRows">
+</tbody>
+</table>
+</div>
+<p class="footnote">This is a calculated material requirement, not an inventory availability or production reservation.</p>
+</section>
+<section class="view" id="view-offer">
+<div class="offer-preview-head">
+<div>
+<p class="eyebrow">A4 CUSTOMER DOCUMENT</p>
+<h2>Quotation preview</h2>
+</div>
+<p>Required in the print dialog: A4 paper, margins set to None, scale 100%, and background graphics enabled. A printer default can override the document size.</p>
+</div>
+<div class="offer-preview-wrap">
+<div id="quotePages" class="quote-pages">
+</div>
+</div>
+</section>
+</section>
+<aside class="summary">
+<p class="eyebrow">ORDER SUMMARY</p>
+<div class="summary-title">
+<h2>Total selling value</h2>
+<span id="summaryCurrency">USD</span>
+</div>
+<div class="headline-total" id="total">7,000.00</div>
+<p id="summaryCaption">1 configured item</p>
+<div class="summary-lines">
+<div>
+<span>Before discount</span>
+<b id="before">
+</b>
+</div>
+<div>
+<span>Total discount</span>
+<b id="discount">
+</b>
+</div>
+<div class="net">
+<span>Net selling value</span>
+<b id="net">
+</b>
+</div>
+</div>
+<div class="internal-summary">
+<p>INTERNAL REVIEW</p>
+<div>
+<span>Total cost</span>
+<b id="fullCost">
+</b>
+</div>
+<div>
+<span>Profit after discount</span>
+<b id="profit">
+</b>
+</div>
+<div>
+<span>Actual profit margin</span>
+<b id="actualMargin">
+</b>
+</div>
+</div>
+<div class="currency-controls">
+<label>Offer currency<select id="currency">
+<option>USD</option>
+<option>EGP</option>
+</select>
+</label>
+<label id="fxWrap" hidden>EGP per USD<input id="fx" type="number" min="0.0001" step="0.0001" placeholder="Enter agreed exchange rate">
+</label>
+<p id="currencyNote" class="footnote">Source calculations are in USD.</p>
+</div>
+<button id="review" class="summary-button">Review customer offer</button>
+<p class="summary-foot">Prices exclude taxes and transport.</p>
+</aside>
+</div>
+<p id="status" role="status" class="status">Demo draft · No data is sent to Bitrix.</p>
+</main>
+<div id="printRoot" class="print-root" aria-hidden="true"></div>
+<div id="drawerBackdrop" class="backdrop" hidden>
+</div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+<div class="drawer-head">
+<div>
+<p class="eyebrow">CONFIGURE ORDER ITEM</p>
+<h2 id="drawerTitle">Wall visible fix panel</h2>
+</div>
+<button id="closeDrawer" aria-label="Close item editor">×</button>
+</div>
+<form id="itemForm">
+<div class="drawer-body">
+<div class="panel-spec">
+<b>40 mm</b>
+<div>
+<strong>Wall visible fix · 1.0 m width</strong>
+<span>Pricing unit: linear metre (M)</span>
+</div>
+</div>
+<div class="field-section">
+<h3>01 <span>Material specifications</span>
+</h3>
+<div class="field-grid">
+<label>Inside steel<select id="inside">
+</select>
+</label>
+<label>Outside steel<select id="outside">
+</select>
+</label>
+<label>Foam<select id="foam">
+<option>PIR</option>
+<option>PUR</option>
+<option>EPS</option>
+</select>
+</label>
+<label>Packing<select id="packing">
+<option>Plastic Roll</option>
+<option>None</option>
+</select>
+</label>
+<label class="wide">Colour<select id="colour">
+</select>
+</label>
+<label class="wide">Other<select id="other">
+<option>None</option>
+<option>فلكسبل</option>
+<option>درجة ثانية</option>
+</select>
+</label>
+</div>
+</div>
+<div class="field-section">
+<h3>02 <span>Quantity &amp; pricing</span>
+</h3>
+<div class="field-grid">
+<label>Quantity (M)<input id="quantity" type="number" min="0.01" step="0.01" required>
+</label>
+<label>Target margin (%)<input id="margin" type="number" min="0" max="99" step="0.1" required>
+</label>
+</div>
+<div class="item-calculated">
+<span>Calculated unit price</span>
+<b id="calculatedPrice">
+</b>
+</div>
+<label>Selling price after discount (USD / M)<input id="after" type="number" min="0" step="0.01" placeholder="Use calculated price">
+</label>
+<p class="footnote">Leave blank to use the calculated price.</p>
+</div>
+<div class="field-section">
+<h3>03 <span>Customer description</span>
+</h3>
+<label class="sr-only" for="description">Technical description</label>
+<textarea id="description" rows="5">
+</textarea>
+<div class="description-footer">
+<span>Editable text for the customer offer</span>
+<button type="button" id="generateDescription" class="text-button">Generate from specs</button>
+</div>
+</div>
+<details class="item-materials">
+<summary>View this item’s material consumption</summary>
+<div id="itemMaterials">
+</div>
+</details>
+<p id="itemError" role="status">
+</p>
+</div>
+<div class="drawer-footer">
+<div>
+<small>ITEM TOTAL · USD</small>
+<strong id="itemTotal">
+</strong>
+</div>
+<button type="submit" class="primary" id="applyItem">Add to order</button>
+</div>
+</form>
+</aside>
+<script src="data.js">
+</script>
+<script src="calculator.js">
+</script>
+<script src="order-model.js">
+</script>
+<script src="xlsx-export.js?v=6">
+</script>
+<script src="app.js?v=13">
+</script>
+<script src="dropdowns.js?v=8">
+</script>
+</body>
+</html>

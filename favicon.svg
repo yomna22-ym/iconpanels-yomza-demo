@@ -1,1 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#203c50"/><path d="M26 13h12v38H26z" fill="#de3935"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ICON Panels">
+  <rect width="64" height="64" rx="12" fill="#fff"/>
+  <path d="M11 7 32 17 53 7v7L32 24 11 14Zm0 10 21 10 21-10v7L32 34 11 24Z" fill="#d71920"/>
+  <path d="m11 28 21 10 21-10v7L32 45 11 35Zm0 10 21 10 21-10v7L32 55 11 45Zm0 10 21 10 21-10v7L32 64 11 55Z" fill="#173f69"/>
+</svg>
